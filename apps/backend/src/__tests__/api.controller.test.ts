@@ -3,6 +3,21 @@ import { fetchUser, updateUser } from '../repository/userCollection';
 import { Request, Response } from 'express';
 
 // Mock the repository functions
+
+import { firestore } from '../firebaseConfig';
+
+jest.mock('../firebaseConfig', () => ({
+  firestore: {
+    collection: jest.fn(() => ({
+      doc: jest.fn(() => ({
+        get: jest.fn(),
+        set: jest.fn(),
+      })),
+    })),
+  },
+}));
+
+const mockFirestore = firestore.collection as jest.Mock;
 jest.mock('../repository/userCollection', () => ({
   fetchUser: jest.fn(),
   updateUser: jest.fn(),
